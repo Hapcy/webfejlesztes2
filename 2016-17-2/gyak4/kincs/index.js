@@ -24,9 +24,11 @@ function randomSzam(min, max) {
 //Üzleti logika
 
 let jatekTer;
+let lepesSzam;
 
 function init(tablaMeret) {
   jatekTer = generateTableModel(tablaMeret);
+  lepesSzam = 0;
   elhelyezKincs(tablaMeret);
   kincsMezo.innerHTML = generateTable(tablaMeret);
 }
@@ -64,6 +66,9 @@ const kincsMezo = $('#kincsMezo');
 function kincsMezoKatt(e) {
   const cella = e.target;
   if (e.target.matches('td')) {
+    if (e.target.innerHTML === '') {
+      lepesSzam++;
+    }
     const koordinatak = xyKoord(cella);
     const talalat = kincsE(koordinatak.y, koordinatak.x);
     if (talalat) {
