@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Hercegno",
+    "age": 24,
+    "breed": "Maine Coon"
+  },
+  {
+    "name": "Hogolyo",
+    "age": 80,
+    "breed": "Maine Coon"
+  },
+  {
+    "name": "Cirmi",
+    "age": 13,
+    "breed": "Siami"
+  }
+]

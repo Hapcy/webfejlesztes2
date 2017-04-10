@@ -1,0 +1,9 @@
+
+
+[csoport]
+kulcs=ertűk
+kulcs2=bar
+
+
+[csoport2]
+kulcs=foo
