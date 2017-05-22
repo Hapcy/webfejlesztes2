@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Hercegno",
+    "age": 24,
+    "breed": "Maine Coon",
+    "picture": "maine_coon_white.jpg"
+  },
+  {
+    "name": "Hogolyo",
+    "age": 80,
+    "breed": "Maine Coon",
+    "picture": "maine_coon_black.jpg"
+  },
+  {
+    "name": "Cirmi",
+    "age": 13,
+    "breed": "Siami",
+    "picture": "siami.jpg"
+  }
+]
