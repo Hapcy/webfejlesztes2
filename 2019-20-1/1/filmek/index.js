@@ -25,5 +25,3 @@ const filmek = [{
         szinesz: 'Adam Sandler',
     }],
 }];
-
-
