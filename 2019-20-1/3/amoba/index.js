@@ -86,20 +86,8 @@ function lepesHandler(event) {
 
 function xyCoord(event) {
   const cella = event.target;
-  const oszlopok = event.target.parentElement.children;
-  let y;
-  for (let i = 0; i < oszlopok.length; ++i) {
-    if (oszlopok[i] === cella) {
-      y = i;
-    }
-  }
   const sor = event.target.parentElement;
-  const sorok = sor.parentElement.children;
-  let x;
-  for (let i = 0; i < sorok.length; ++i) {
-    if (sorok[i] === sor) {
-      x = i;
-    }
-  }
+  const x = sor.sectionRowIndex;
+  const y = cella.cellIndex;
   return { x: x, y: y };
 }
