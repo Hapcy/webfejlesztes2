@@ -5,15 +5,15 @@ export function render(field) {
         for (let j = 0; j < field.dimension; ++j) {
             let cell = '<td>';
             const cellModel = field.table[i][j];
-            //if (cellModel.checked) {
+            if (cellModel.checked) {
                 if (cellModel.isMine) {
-                    cell += 'bomba';
+                    cell += '💣';
                 } else {
                     cell += cellModel.neighbours;
                 }
-            //}
+            }
             if (cellModel.flagged) {
-                cell += 'zaszlo';
+                cell += '⚑';
             }
             cell += '</td>';
             row += cell;

@@ -13,3 +13,11 @@ export function delegate(parent, type, selector, fn) {
   
     parent.addEventListener(type, delegatedFunction);
 }
+
+export function xyCoord(event) {
+  const cella = event.target;
+  const sor = event.target.parentElement;
+  const x = sor.sectionRowIndex;
+  const y = cella.cellIndex;
+  return { x: x, y: y };
+}
