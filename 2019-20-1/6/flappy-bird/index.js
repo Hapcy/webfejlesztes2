@@ -13,35 +13,47 @@ const bird = {
     y: 0,
     width: birdImage.width,
     height: birdImage.height,
-    ySpeed: 1.1,
+    ySpeed: 1,
 };
 
-const gravity = 1.00001;
-const gap = 80;
+const gravity = 0.8;
+const gap = 120;
 const pipeSpeed = -2;
 
 const pipes = [{
     x: canvas.width,
-    y: -50,
+    y: -120,
 }];
+
+let gameOver = false;
+let score = 0;
 
 function drawScene() {
     ctx.clearRect(0, 0,
         canvas.width, canvas.height);
     
+    // madár mozgatása
     if (bird.ySpeed <= 10) {
         bird.ySpeed += gravity;
     }
-    bird.y += bird.ySpeed;
+    bird.y += bird.ySpeed * 0.7;
+
+    // talajjal ütközés ellenőrzése
+    if ((bird.y + bird.height) >= canvas.height) {
+        gameOver = true;
+        bird.y = canvas.height - bird.height;
+    }
+
     ctx.drawImage(birdImage, bird.x, bird.y);
 
-
+    // pipeok új pozíciójának kiszámítása
     for (let i = 0; i < pipes.length; ++i) {
         const pipe = pipes[i];
         pipe.x += pipeSpeed;
     }
     if (pipes[0] && pipes[0].x < -pipeUpper.width) {
         pipes.shift();
+        score += 1;
     }
     if (pipes[0] && pipes[0].x < 100 && pipes.length < 2) {
         pipes.push({
@@ -51,6 +63,30 @@ function drawScene() {
             ),
         });
     }
+
+    // pipe ütközés
+    const collidingPipe = pipes.find(pipe => {
+        const birdTop = bird.y;
+        const birdLeft = bird.x;
+        const birdRight = bird.x + bird.width;
+        const birdBottom = bird.y + bird.height;
+
+        const pipeLeft = pipe.x;
+        const pipeRight = pipe.x + pipeUpper.width;
+        const pipeTopStart = pipe.y + pipeUpper.height;
+        const pipeBottomStart = pipeTopStart + gap;
+
+        // felső pipepal ütközés
+
+        if (birdRight >= pipeLeft
+            && birdLeft <= pipeRight) {
+            gameOver = birdTop <= pipeTopStart
+                || birdBottom >= pipeBottomStart;
+        }
+
+    });
+
+    // pipeok kirajzolása
     for (let i = 0; i < pipes.length; ++i) {
         const pipe = pipes[i];
         ctx.drawImage(pipeUpper, pipe.x, pipe.y);
@@ -60,8 +96,13 @@ function drawScene() {
             pipe.y + pipeUpper.height + gap
         );
     }
-    
-    requestAnimationFrame(drawScene);
+
+    ctx.font = '50px serif';
+    ctx.fillText(score.toString(), 0, 50);
+
+    if (!gameOver) {
+        requestAnimationFrame(drawScene);
+    }
 }
 
 drawScene();
