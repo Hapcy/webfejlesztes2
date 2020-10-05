@@ -1,57 +1,54 @@
-class Board {
-  constructor(width = 10, height = 10) {
-    this.width = width;
-    this.height = height;
-    this.gameOver = true;
-  }
+const gameDiv = document.querySelector('#game');
 
-  start() {
-    this.gameOver = false;
-    this.snake = new Snake();
-    this.food = new Food(this.width, this.height);
-  }
+const board = new Board(5, 5);
+board.start();
 
-  step() {
-    this.snake.move();
+drawBoard(board, gameDiv);
 
-    if (!this.didSnakeEat()) {
-      this.snake.shrink();
+let newDirection;
+// gomblenyomásra megváltoztatni a kígyó irányát
+function handleKeyDown(e) {
+  switch (e.key) {
+    case 'ArrowDown': {
+      newDirection = { x: 0, y: 1 };
+      break;
     }
-
-    if (!this.isSnakeAlive()) {
-      this.gameOver = true;
+    case 'ArrowUp': {
+      newDirection = { x: 0, y: -1 };
+      break;
+    }
+    case 'ArrowLeft': {
+      newDirection = { x: -1, y: 0 };
+      break;
+    }
+    case 'ArrowRight': {
+      newDirection = { x: 1, y: 0 };
+      break;
     }
   }
+}
+document.addEventListener('keydown', handleKeyDown);
 
-  didSnakeEat() {
-
-  }
-
-  isSnakeAlive() {
-
-  }
+// léptetni a játékot adott időközönként
+function start() {
+  setTimeout(() => tick(), 500);
 }
 
-class Snake {
-  constructor(startingPosition = { x: 0, y: 0 }) {
-    this.head = startingPosition;
-    this.tail = [];
+function tick() {
+  if (newDirection) {
+    board.changeSnakeDirection(newDirection);
+    newDirection = null;
+  }
+  
+  board.step();
+
+  if (board.gameOver) {
+    return;
   }
 
-  move() {
+  drawBoard(board, gameDiv);
 
-  }
+  setTimeout(() => tick(), 500);
 }
 
-class Food {
-  constructor(width, height) {
-    this.position = { x: random(0, width), y: random(0, height) };
-  }
-}
-
-function random(min, max) {
-  const zeroBasedIntervalEnd = max - min;
-  const randomInZeroBasedInterval = Math.floor(Math.random() * (zeroBasedIntervalEnd + 1));
-  return randomInZeroBasedInterval + min;
-}
-
+start();
