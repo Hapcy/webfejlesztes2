@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      table.preview,
+      table.edit {
+        border-collapse: collapse;
+      }
+      table.preview td {
+        border: none;
+        width: 3px;
+        height: 3px;
+        padding: 0;
+      }
+      table.edit td {
+        border: 1px solid lightgray;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="dimensionForm">
+      Szélesség: <input type="number" name="width" />
+      Magasság: <input type="number" name="height" />
+      <button type="submit">Mutasd</button>
+    </form>
+    <table class="preview">
+      <tr>
+        <td style="background-color: #ff0000"></td>
+        <td style="background-color: #00ff00"></td>
+        <td style="background-color: #0000ff"></td>
+      </tr>
+    </table>
+    <hr />
+    <table class="edit">
+      <tr>
+        <td style="background-color: #ff0000"></td>
+        <td style="background-color: #00ff00"></td>
+        <td style="background-color: #0000ff"></td>
+      </tr>
+    </table>
+    <script src="index.js"></script>
+  </body>
+</html>
