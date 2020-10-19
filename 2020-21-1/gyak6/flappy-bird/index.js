@@ -8,7 +8,11 @@ const images = {
   pipeSouth: new Image(),
 };
 
+const MAX_POINTS_KEY = 'flappybird-max';
+
 let isGameOver = false;
+let points = 0;
+let maxPoints = parseInt(localStorage.getItem(MAX_POINTS_KEY)) || 0; // default operátor (veszélyes, ha számokat tárolunk, mert 0 is defaultolódik)
 
 const pipes = [];
 const GAP = 150; // px, felső és alsó oszlop közötti rés
@@ -35,7 +39,7 @@ const bird = {
 
 let prevTime = performance.now();
 
-function gameCycle(now = performance.now()) {
+function gameLoop(now = performance.now()) {
   const dt = (now - prevTime) / 1000;
   prevTime = now;
 
@@ -43,13 +47,15 @@ function gameCycle(now = performance.now()) {
   draw();
 
   if (!isGameOver) {
-    requestAnimationFrame(gameCycle);
+    requestAnimationFrame(gameLoop);
   }
 }
 function update(dt) {
   // függőleges mozgás
-  bird.vy = bird.vy + bird.ay * dt;
-  bird.y = bird.y + bird.vy * dt;
+  // Sebesség módosítása: dv = a * dt
+  // Pozíció módosítása: ds = v * dt
+  bird.vy += bird.ay * dt;
+  bird.y += bird.vy * dt;
 
   // kis extra, hogy flappy birdösebben mozogjon a madár
   if (bird.vy > 0) {
@@ -62,7 +68,7 @@ function update(dt) {
   if (bird.y < 0) {
     bird.y = 0;
   }
-  if (bird.y > canvas.height - bird.height) {
+  if ((bird.y + bird.height) > canvas.height) {
     isGameOver = true;
     bird.y = canvas.height - bird.height;
   }
@@ -78,18 +84,24 @@ function update(dt) {
   // pipes mozgatása
   pipes.forEach((pipe) => {
     // oszlop mozgatása OSZLOP_SEBESSEG-gel
-    pipe.x = pipe.x + PIPE_SPEED * dt;
+    pipe.x += PIPE_SPEED * dt;
   });
 
   // pipes törlése
   // Ha a tömb elején lévő oszlop elhagyta a canvast, akkor vedd ki az első kettőt
   const firstPipe = pipes[0];
   if (firstPipe.x + firstPipe.width < 0) {
+    points += 1;
+    if (points > maxPoints) {
+      maxPoints = points;
+      localStorage.setItem(MAX_POINTS_KEY, maxPoints);
+    }
+
     pipes.shift();
     pipes.shift();
   }
 
-  isGameOver = isGameOver || pipes.some((oszlop) => collides(oszlop, bird));
+  isGameOver = isGameOver || pipes.some((pipe) => collides(pipe, bird));
 }
 function draw() {
   drawObject(background);
@@ -99,6 +111,10 @@ function draw() {
   pipes.forEach((pipe) => {
     drawPipe(pipe);
   });
+
+  ctx.fillStyle = 'red';
+  ctx.font = '50px serif';
+  ctx.fillText(`${points} / ${maxPoints}`, 10, canvas.height - 50);
 
   if (isGameOver) {
     ctx.fillStyle = 'red';
@@ -122,6 +138,7 @@ function drawPipe({ x, y, width, height, image }) {
 }
 
 function drawObject({ x, y, width, height, image }) {
+  // ctx.fillRect(x, y, width, height);
   ctx.drawImage(image, x, y, width, height);
 }
 
@@ -170,4 +187,4 @@ images.pipeNorth.src = 'images/pipeNorth.png';
 images.pipeSouth.src = 'images/pipeSouth.png';
 
 newPipe();
-gameCycle();
+gameLoop();
